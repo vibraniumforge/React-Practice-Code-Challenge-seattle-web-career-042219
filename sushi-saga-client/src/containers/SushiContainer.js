@@ -14,10 +14,8 @@ const SushiContainer = props => {
   });
   return (
     <Fragment>
-      <div className="belt">
-        {sushis}
-        <MoreButton onHandleMoreButtonClick={props.onHandleMoreButtonClick} />
-      </div>
+      <div className="belt">{sushis}</div>
+      <MoreButton onHandleMoreButtonClick={props.onHandleMoreButtonClick} />
     </Fragment>
   );
 };

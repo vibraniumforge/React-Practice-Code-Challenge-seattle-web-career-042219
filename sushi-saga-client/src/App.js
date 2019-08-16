@@ -29,16 +29,13 @@ class App extends Component {
     e.preventDefault();
     this.setState(
       prevState => ({
-        firstSushi: prevState.firstSushi + (4 % prevState.sushis.length)
+        firstSushi: (prevState.firstSushi + 4) % prevState.sushis.length
       }),
       () => console.log(this.state.firstSushi)
     );
   };
 
   onHandleSushiPlateClick = clickedSushi => {
-    // e.persist();
-    console.log(clickedSushi);
-    console.log(this.state);
     if (
       clickedSushi.eaten === false &&
       this.state.moneyLeft >= clickedSushi.price
@@ -49,15 +46,11 @@ class App extends Component {
           sushi.eaten = true;
         }
       });
-      console.log(newSushiArray);
-      this.setState(
-        prevState => ({
-          moneyLeft: prevState.moneyLeft - clickedSushi.price,
-          sushis: newSushiArray,
-          eatenSushis: [...prevState.eatenSushis, clickedSushi]
-        }),
-        () => console.log(this.state)
-      );
+      this.setState(prevState => ({
+        moneyLeft: prevState.moneyLeft - clickedSushi.price,
+        sushis: newSushiArray,
+        eatenSushis: [...prevState.eatenSushis, clickedSushi]
+      }));
     }
   };
 
