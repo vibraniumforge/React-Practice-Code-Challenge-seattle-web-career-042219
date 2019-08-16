@@ -8,7 +8,8 @@ const API = "http://localhost:3000/sushis";
 class App extends Component {
   state = {
     sushis: [],
-    sushi4: [],
+    firstSushi: 0,
+    eatenSushis: [],
     moneyLeft: 100
   };
 
@@ -26,35 +27,54 @@ class App extends Component {
 
   onHandleMoreButtonClick = e => {
     e.preventDefault();
-    const newSushis4 = this.state.sushis.splice(-4);
-    this.setState({ sushi4: newSushis4 }, () => console.log(this.state));
+    this.setState(
+      prevState => ({
+        firstSushi: prevState.firstSushi + (4 % prevState.sushis.length)
+      }),
+      () => console.log(this.state.firstSushi)
+    );
   };
 
   onHandleSushiPlateClick = clickedSushi => {
     // e.persist();
     console.log(clickedSushi);
-    this.setState(
-      prevState => ({
-        moneyLeft: prevState.moneyLeft - clickedSushi.price,
-        sushi4: prevState.sushi4.map(sushi => {
-          return sushi.id === parseInt(clickedSushi.id, 10)
-            ? (sushi.eaten = true)
-            : sushi;
-        })
-      }),
-      () => console.log(this.state)
-    );
+    console.log(this.state);
+    if (
+      clickedSushi.eaten === false &&
+      this.state.moneyLeft >= clickedSushi.price
+    ) {
+      let newSushiArray = [...this.state.sushis];
+      newSushiArray.forEach(sushi => {
+        if (sushi.id === clickedSushi.id) {
+          sushi.eaten = true;
+        }
+      });
+      console.log(newSushiArray);
+      this.setState(
+        prevState => ({
+          moneyLeft: prevState.moneyLeft - clickedSushi.price,
+          sushis: newSushiArray,
+          eatenSushis: [...prevState.eatenSushis, clickedSushi]
+        }),
+        () => console.log(this.state)
+      );
+    }
   };
 
   render() {
+    const itemNumber = this.state.firstSushi;
+    const filteredList = this.state.sushis.slice(itemNumber, itemNumber + 4);
     return (
       <div className="app">
         <SushiContainer
           onHandleMoreButtonClick={this.onHandleMoreButtonClick}
-          sushi4={this.state.sushi4}
+          sushis={filteredList}
           onHandleSushiPlateClick={this.onHandleSushiPlateClick}
         />
-        <Table sushi4={this.state.sushi4} moneyLeft={this.state.moneyLeft} />
+        <Table
+          eatenSushis={this.state.eatenSushis}
+          moneyLeft={this.state.moneyLeft}
+        />
       </div>
     );
   }

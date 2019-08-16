@@ -13,7 +13,7 @@ const Table = props => {
     <Fragment>
       <h1 className="remaining">You have: ${props.moneyLeft} remaining!</h1>
       <div className="table">
-        <div className="stack">{renderPlates(props.sushi4)}</div>
+        <div className="stack">{renderPlates(props.eatenSushis)}</div>
       </div>
     </Fragment>
   );
